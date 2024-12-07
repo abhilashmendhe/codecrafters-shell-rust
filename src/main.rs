@@ -1,9 +1,14 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 
+use codecrafters_shell::search_directory;
+
 fn main() {
     // Uncomment this block to pass the first stage
-
+    // println!("{:?}",std::env::var("PATH"));
+    let path_var = std::env::var("PATH").unwrap();
+    let allpaths = path_var.split(":").collect::<Vec<_>>();
+    // println!("{:?}",allpaths);
     loop {
         print!("$ ");
         io::stdout().flush().unwrap();
@@ -27,12 +32,19 @@ fn main() {
             let command_str = t_input_spl.next().unwrap();
 
             if builtin.contains(&command_str) {
+
                 println!("{} is a shell builtin",command_str);
             } else {
-                println!("{} not found",command_str);
+                let p_ath = search_directory(allpaths.as_slice(), command_str.to_string());
+                if p_ath.len() > 0 {
+                    println!("{} is {}", command_str, p_ath);
+                } else {
+                    println!("{}: not found",command_str);
+                }
             }
         } else {
             println!("{}: command not found", trim_input);
         }
     }
 }
+
