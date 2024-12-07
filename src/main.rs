@@ -17,7 +17,11 @@ fn main() {
         if trim_inp == "exit 0" {
             break;
         }
-        print!("{}: command not found\n", input.trim());
 
+        if trim_inp.starts_with("echo") {
+            println!("{}",&trim_inp[5..]);
+        } else {
+            println!("{}: command not found", trim_inp);
+        }
     }
 }
