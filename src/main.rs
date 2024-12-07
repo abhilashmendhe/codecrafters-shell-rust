@@ -1,14 +1,14 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
+use std::{os::unix::process::CommandExt, process::Command};
 
 use codecrafters_shell::search_directory;
 
 fn main() {
-    // Uncomment this block to pass the first stage
-    // println!("{:?}",std::env::var("PATH"));
+
     let path_var = std::env::var("PATH").unwrap();
     let allpaths = path_var.split(":").collect::<Vec<_>>();
-    // println!("{:?}",allpaths);
+
     loop {
         print!("$ ");
         io::stdout().flush().unwrap();
@@ -43,7 +43,25 @@ fn main() {
                 }
             }
         } else {
-            println!("{}: command not found", trim_input);
+            let mut t_input_spl = trim_input.split(" ");
+            let program = t_input_spl.next().unwrap();
+            // let p_arg = t_input_spl.next();
+            let script = search_directory(allpaths.as_slice(), program.to_string());
+            if script.len() > 0 {
+            
+                if let Some(parg) = t_input_spl.next() {
+
+                    if let Ok(output) = Command::new(script)
+                        .arg(parg)
+                        .output() {
+                            let out = String::from_utf8_lossy(&output.stdout);
+                            println!("{}",out.trim());
+                        }
+                }
+
+            } else {
+                println!("{}: command not found", trim_input);
+            }
         }
     }
 }
