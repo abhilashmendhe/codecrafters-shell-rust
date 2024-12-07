@@ -12,7 +12,12 @@ fn main() {
         let stdin = io::stdin();
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
-
+        
+        let trim_inp = input.trim();
+        if trim_inp == "exit 0" {
+            break;
+        }
         print!("{}: command not found\n", input.trim());
+
     }
 }
