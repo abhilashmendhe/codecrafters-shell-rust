@@ -32,7 +32,29 @@ fn main() {
                 println!("{}",&next_str[1..(len-1)]);
 
             } else if next_str.starts_with('\"') {
-                println!("{}",&next_str[1..(len-1)]);
+                // println!("{}",&next_str[1..(len-1)]);
+                // let s = "\"bar\"  \"shell's\"  \"foo\"";
+                let mut s = String::new();
+                let mut f = true;
+                let mut alls = String::new();
+
+                for ch in next_str.chars().collect::<Vec<char>>() {
+
+                    if ch == '\"' && f {
+                        f = false;
+                        continue;
+                    } 
+                    if ch == '\"' && !f {
+                        alls.push_str(&s);
+                        alls.push(' ');
+                        f = true;
+                        s = "".to_string();
+                    }
+                    if !f {
+                        s.push(ch);
+                    }
+                }
+                println!("{}", alls.trim_end());
             } else {
                 let mut str = String::new();
                 let mut f = true;
@@ -59,23 +81,46 @@ fn main() {
             let mut f = true;
             let mut s = String::new();
             let mut all_file_content = String::new();
-            for ch in next_str.chars().collect::<Vec<char>>() {
-                if ch == '\'' && f {
-                    f = false;
-                    continue;
-                }
-                if ch == '\'' && !f {
-                    // println!("\"{}\"",s);
-                    let content = read_file(s);
-                    let content = String::from_utf8_lossy(&content);
-                    if content.len() > 0 {
-                        all_file_content.push_str(&content);
+            if next_str.starts_with('\'') {
+                
+                for ch in next_str.chars().collect::<Vec<char>>() {
+                    if ch == '\'' && f {
+                        f = false;
+                        continue;
                     }
-                    f = true;
-                    s = "".to_string();
+                    if ch == '\''  && !f {
+                        // println!("\"{}\"",s);
+                        let content = read_file(s);
+                        let content = String::from_utf8_lossy(&content);
+                        if content.len() > 0 {
+                            all_file_content.push_str(&content);
+                        }
+                        f = true;
+                        s = "".to_string();
+                    }
+                    if !f {
+                        s.push(ch);
+                    }
                 }
-                if !f {
-                    s.push(ch);
+            } else if next_str.starts_with('\"') {
+                for ch in next_str.chars().collect::<Vec<char>>() {
+                    if ch == '\"' && f {
+                        f = false;
+                        continue;
+                    }
+                    if ch == '\"' && !f {
+                        // println!("\"{}\"",s);
+                        let content = read_file(s);
+                        let content = String::from_utf8_lossy(&content);
+                        if content.len() > 0 {
+                            all_file_content.push_str(&content);
+                        }
+                        f = true;
+                        s = "".to_string();
+                    }
+                    if !f {
+                        s.push(ch);
+                    }
                 }
             }
             println!("{}", all_file_content.trim());
