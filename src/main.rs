@@ -34,6 +34,7 @@ fn main() {
             } else if next_str.starts_with('\"') {
                 // println!("{}",&next_str[1..(len-1)]);
                 // let s = "\"bar\"  \"shell's\"  \"foo\"";
+
                 let mut s = String::new();
                 let mut f = true;
                 let mut alls = String::new();
@@ -56,20 +57,46 @@ fn main() {
                 }
                 println!("{}", alls.trim_end());
             } else {
-                let mut str = String::new();
+                // let mut str = String::new();
+                // let mut f = true;
+                // // next_str
+                // for ch in &next_str.chars().collect::<Vec<char>>() {
+                //     if ch.is_alphanumeric() {
+                //         str.push(*ch);  
+                //         f = true;
+                //     } else {
+                //         if f {
+                //             str.push(' ');
+                //             f = false;
+                //         }
+                //     }
+                // }
+                // println!("{}",str);
+
+                // let mut str = String::new();
+                // let allchars = &next_str.chars().collect::<Vec<char>>();
+                // for i in 0..next_str.len() {
+                //     let ch = allchars[i];
+                    
+                // }
                 let mut f = true;
+                let mut s = String::new();
                 for ch in &next_str.chars().collect::<Vec<char>>() {
-                    if ch.is_alphabetic() {
-                        str.push(*ch);
-                        f = true;
-                    } else {
+                    if *ch ==  ' ' {
                         if f {
-                            str.push(' ');
+                            s.push(' ');
                             f = false;
+                        }
+                    } else {
+                        if ch.is_alphanumeric() {
+                            s.push(*ch);
+                            f = true;
+                        } else {
+                            f = true;
                         }
                     }
                 }
-                println!("{}",str);
+                println!("{}", s);
             }
 
 
