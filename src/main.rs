@@ -2,7 +2,7 @@
 use std::io::{self, Write};
 use std::{path::Path, process::Command};
 
-use codecrafters_shell::search_directory;
+use codecrafters_shell::{read_file, search_directory};
 
 fn main() {
 
@@ -24,7 +24,61 @@ fn main() {
         }
 
         if trim_input.starts_with("echo") {
-            println!("{}",&trim_input[5..]);
+
+            let next_str = &trim_input[5..];
+            let len = next_str.len();
+
+            if next_str.starts_with('\'') {
+                println!("{}",&next_str[1..(len-1)]);
+
+            } else if next_str.starts_with('\"') {
+                println!("{}",&next_str[1..(len-1)]);
+            } else {
+                let mut str = String::new();
+                let mut f = true;
+                for ch in &next_str.chars().collect::<Vec<char>>() {
+                    if ch.is_alphabetic() {
+                        str.push(*ch);
+                        f = true;
+                    } else {
+                        if f {
+                            str.push(' ');
+                            f = false;
+                        }
+                    }
+                }
+                println!("{}",str);
+            }
+
+
+        } else if trim_input.starts_with("cat") {
+
+            let next_str = &trim_input[4..];
+            // let tmpstr = "'/tmp/bar/f   18' '/tmp/bar/f   33' '/tmp/bar/f   22'";
+
+            let mut f = true;
+            let mut s = String::new();
+            let mut all_file_content = String::new();
+            for ch in next_str.chars().collect::<Vec<char>>() {
+                if ch == '\'' && f {
+                    f = false;
+                    continue;
+                }
+                if ch == '\'' && !f {
+                    // println!("\"{}\"",s);
+                    let content = read_file(s);
+                    let content = String::from_utf8_lossy(&content);
+                    if content.len() > 0 {
+                        all_file_content.push_str(&content);
+                    }
+                    f = true;
+                    s = "".to_string();
+                }
+                if !f {
+                    s.push(ch);
+                }
+            }
+            println!("{}", all_file_content.trim());
 
         } else if trim_input.starts_with("cd") {
             
