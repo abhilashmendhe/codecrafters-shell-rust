@@ -16,15 +16,11 @@ pub fn echo_cmd(trim_input: &str) {
     for (_ind, ch) in next_str.char_indices() {
 
         if slash_flag {
-            // println!("slahsh true for {} at index: {}",ch,ind);
-            // println!("{}", ch=='\'');
-            // println!("single - {}, double - {}", single_oc_flag, double_oc_flag);
-            // println!("{}", str);
+
             if double_oc_flag {
                 if ch == '\\' || ch == '"' {
                     str.push(ch);
                 } else if ch == ' ' {
-                    // println!("heere for space after \\");
                     str.push('\\');
                     str.push(' ');
                 } else {
@@ -34,21 +30,6 @@ pub fn echo_cmd(trim_input: &str) {
             } else {
                 str.push(ch);
             }
-            // if ch == '\'' {
-            //     str.push('\\');
-            //     str.push(ch);
-
-            // } else {
-            //     // if ch == ' ' {
-            //         if single_oc_flag || double_oc_flag {
-            //             str.push('\\');
-            //         } else {
-            //             str.push(ch);
-            //         }
-            //     // } else {
-            //     //     str.push(ch);
-            //     // }
-            // }
 
             slash_flag = false;
             continue;
@@ -86,16 +67,12 @@ pub fn echo_cmd(trim_input: &str) {
         if ch == ' ' {
             if single_oc_flag || double_oc_flag || space_flag {
                 str.push(' ');
-                // println!("ikde pro");
-                // // if space_flag {
-                // //     str.push(' ');
-                    space_flag = false;
-                // // }
-            } 
-            if space_flag {
-                str.push(' ');
                 space_flag = false;
-            }
+            } 
+            // if space_flag {
+            //     str.push(' ');
+            //     space_flag = false;
+            // }
 
             continue;
         }

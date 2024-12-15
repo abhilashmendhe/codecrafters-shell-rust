@@ -5,6 +5,7 @@ use std::process::Command;
 use commands::cat::cat_cmd;
 use commands::cd::cd_cmd;
 use commands::echo::echo_cmd;
+use commands::exe::exe_cmd;
 use commands::type_command::type_cmd;
 
 pub mod commands;
@@ -42,7 +43,12 @@ pub fn run_shell(path_var: String) {
         } else if trim_input.starts_with("type") {
             type_cmd(trim_input, allpaths.clone());
 
-        } else {
+        } else if trim_input.starts_with("'exe") || trim_input.starts_with("\"exe") {
+            // cat_cmd(trim_input);
+            exe_cmd(trim_input);
+        }
+        
+        else {
             
             let mut t_input_spl = trim_input.split(" ");
             let program = t_input_spl.next().unwrap();
