@@ -1,0 +1,82 @@
+pub fn echo_cmd(trim_input: &str) {
+    let next_str = &trim_input[5..];
+    let len = next_str.len();
+
+    if next_str.starts_with('\'') {
+        println!("{}",&next_str[1..(len-1)]);
+
+    } else if next_str.starts_with('\"') {
+        // println!("{}",&next_str[1..(len-1)]);
+        // let s = "\"bar\"  \"shell's\"  \"foo\"";
+
+        let mut s = String::new();
+        let mut f = true;
+        let mut f1 = false;
+
+        let mut alls = String::new();
+
+        for ch in next_str.chars().collect::<Vec<char>>() {
+            // println!("{}",ch);
+            if f1 {
+                s.push(ch);
+                f1 = false;
+                continue;
+            }
+            if ch == '\\' {
+                // println!("detected \\");
+                f1 = true;
+                continue;
+            }   
+            if ch == '\"' && f {
+                f = false;
+                continue;
+            } 
+            if ch == '\"' && !f {
+                alls.push_str(&s);
+                alls.push(' ');
+                f = true;
+                s = "".to_string();
+            }
+            if !f {
+                s.push(ch);
+            }
+        }
+        println!("{}", alls.trim_end());
+        
+    } else {
+        // let mut str = String::new();
+        // let mut f = true;
+        // // next_str
+        // for ch in &next_str.chars().collect::<Vec<char>>() {
+        //     if ch.is_alphanumeric() {
+        //         str.push(*ch);  
+        //         f = true;
+        //     } else {
+        //         if f {
+        //             str.push(' ');
+        //             f = false;
+        //         }
+        //     }
+        // }
+        // println!("{}",str);
+
+        let mut f = true;
+        let mut s = String::new();
+        for ch in &next_str.chars().collect::<Vec<char>>() {
+            if *ch ==  ' ' {
+                if f {
+                    s.push(' ');
+                    f = false;
+                }
+            } else {
+                if ch.is_alphanumeric() {
+                    s.push(*ch);
+                    f = true;
+                } else {
+                    f = true;
+                }
+            }
+        }
+        println!("{}", s);
+    }
+}
